@@ -7,11 +7,10 @@
  * @param {string} id_estado    id do elemento HTML para mostrar o estado 
  */
 function limparDadosCep(id_rua, id_bairro, id_cidade, id_estado) {
-    document.getElementById(id_rua).innerHTML = "";
-    document.getElementById(id_bairro).innerHTML = "";
-    document.getElementById(id_cidade).innerHTML = "";
-    document.getElementById(id_estado).innerHTML = "";
-    /* TODO */
+    document.getElementById(id_rua).value = "";
+    document.getElementById(id_bairro).value = "";
+    document.getElementById(id_cidade).value = "";
+    document.getElementById(id_estado).value = "";
 }
 
 /**
@@ -21,7 +20,7 @@ function limparDadosCep(id_rua, id_bairro, id_cidade, id_estado) {
  * @param {string} id_msg_erro id do elemento para aparecer a mensagem
  */
 function mostrarMsgErro(mensagem, id_msg_erro){
-    /* TODO */
+    document.getElementById(id_msg_erro).innerHTML = mensagem;
 }
 
 /**
@@ -30,7 +29,7 @@ function mostrarMsgErro(mensagem, id_msg_erro){
  * @param {string} id_msg_erro id do elemento com a mensagem de erro
  */
 function apagarMsgErro(id_msg_erro){
-    /* TODO */
+    document.getElementById(id_msg_erro).innerHTML = "";
 }
 
 /**
@@ -41,11 +40,16 @@ function apagarMsgErro(id_msg_erro){
  * @returns {boolean}
  */
 function isFormatoCepValido(cep){
-    /* TODO */
+    let formatoValido = /^[0-9]{8}$/;
+    
+    return formatoValido.test(cep);
 }
 
 function processarCepValido(dados_cep, id_rua, id_bairro, id_cidade, id_estado){    
-    /* TODO */
+    document.getElementById(id_rua).value = dados_cep.logradouro;
+    document.getElementById(id_bairro).value = dados_cep.bairro;
+    document.getElementById(id_cidade).value = dados_cep.localidade;
+    document.getElementById(id_estado).value = dados_cep.uf;
 }
 
 /**
@@ -73,9 +77,35 @@ function processarCepValido(dados_cep, id_rua, id_bairro, id_cidade, id_estado){
 function pesquisarCep(id_cep, id_rua, id_bairro, id_cidade, id_estado, id_msg_erro){
 	
     let cep = parseInt(document.getElementById(id_cep).value);    
-    
-    console('Pesquisar dados do CEP: ' + cep);
-    
-    /* TODO */
 
+    if(cep != "" ) {
+        limparDadosCep(id_rua, id_bairro, id_cidade, id_estado);
+
+        if( !isFormatoCepValido(cep) ) {
+            mostrarMsgErro("Ops! Formato de CEP inválido.", id_msg_erro);
+            limparDadosCep(id_rua, id_bairro, id_cidade, id_estado);
+            setTimeout(()=> {apagarMsgErro(id_msg_erro)}, 2000);
+        } else {
+            let xhr = new XMLHttpRequest();
+            xhr.onreadystatechange = function () {
+                if( xhr.readyState == XMLHttpRequest.DONE ) {
+                    let requestedObject = JSON.parse(xhr.responseText);
+                    if( 'erro' in requestedObject ) {
+                        mostrarMsgErro("CEP inexistente!", id_msg_erro);
+                        limparDadosCep(id_rua, id_bairro, id_cidade, id_estado);
+                        setTimeout(()=> {apagarMsgErro(id_msg_erro)}, 2000);
+                    } else {
+                        processarCepValido(requestedObject, id_rua, id_bairro, id_cidade, id_estado);
+
+                    }
+                }
+            };
+            
+            let url = 'https://viacep.com.br/ws/'+ cep + '/json/';
+            xhr.open('GET', url);
+            xhr.send();   
+        }
+    } else {
+        limparDadosCep(id_rua, id_bairro, id_cidade, id_estado);
+    }
 }
