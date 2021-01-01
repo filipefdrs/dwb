@@ -68,7 +68,7 @@
           <div id="modal1" class="modal">
             <div class="modal-content">
               <h4>Instruções de uso</h4>
-              <p>Em Breve</p>
+              <p>Insira um CEP no campo CEP, pressione enter e aguarde.</p>
             </div>
 
             <div class="modal-footer">
@@ -115,13 +115,56 @@
                   <span class="msg_erro" id="msg_erro"></span>
                 </div>                
               </form>
-              
-              <div class="row center">
-                <a href="#" id="download-button" class="btn-large waves-effect waves-light blue">Enviar<i class="material-icons right">send</i></a>
-              </div>
             </div>
           </div>
-            
+        </div>
+
+        <br /><br /><br />
+
+        <div class="section container">
+          <h3 id="endereco" class="white-text text-lighten-4">Endereço da Entrega</h3>
+          <hr />
+          <div class="">
+            <div class="section row">
+              <form method="get" action="#" class="col s12">            
+                <div class="input-field col s6">
+                    <input placeholder="CEP" type="text" id="cep1" value="" size="8" minlength="8" maxlength="8"/>
+                    <label for="cep">CEP</label>
+                    <span class="msg_erro" id="msg_erro1"></span>
+                </div>
+                <!-- TODO
+                Implementar os campos rua, bairro, cidade, estado.
+                -->               
+                <div class="input-field col s6">
+                  <input placeholder="Rua" id="rua1" type="text" class="validate" size="40" readonly />
+                  <label for="rua">Rua</label>
+                  <span class="msg_erro" id="msg_erro1"></span>
+                </div>
+
+                <div class="input-field col s6">
+                  <input placeholder="Bairro" id="bairro1" type="text" class="validate" size="40" readonly />
+                  <label for="bairro">Bairro</label>
+                  <span class="msg_erro" id="msg_erro1"></span>
+                </div>
+
+                <div class="input-field col s6">
+                  <input placeholder="Cidade" id="cidade1" type="text" class="validate" size="40" readonly />
+                  <label for="cidade">Cidade</label>
+                  <span class="msg_erro" id="msg_erro1"></span>
+                </div>
+
+                <div class="input-field col s6">
+                  <input placeholder="UF" id="uf1" type="text" class="validate" size="2" readonly />
+                  <label for="rua">Estado</label>
+                  <span class="msg_erro" id="msg_erro1"></span>
+                </div>                
+              </form>
+            </div>
+          </div>  
+        </div>
+        <div class="row center">
+          <a href="#" id="download-button" class="btn-large waves-effect waves-light blue" onclick="pesquisarCep('cep', 'rua', 'bairro', 'cidade', 'uf', 'msg_erro');pesquisarCep('cep1', 'rua1', 'bairro1', 'cidade1', 'uf1', 'msg_erro1');">Enviar<i class="material-icons right">send</i></a>
+          <a href="#" id="download-button" class="btn-large waves-effect waves-light blue" onclick="limparDadosCep('rua', 'bairro', 'cidade', 'uf', 'msg_erro');limparDadosCep('rua1', 'bairro1', 'cidade1', 'uf1', 'msg_erro1');">Resetar<i class="material-icons right">clear</i></a>
         </div>
         
       </main>
@@ -156,14 +199,5 @@
       <script type="text/javascript" src="js/materialize.js"></script>
       <script type="text/javascript" src="js/init.js"></script>
       <script type="text/javascript" src="js/helper_pesquisacep.js"></script>
-      <script type="text/javascript" src="js/message.js"></script>
-      <script>
-        document.getElementById("cep").onchange = function() {
-          alert("Preencher os dados para o CEP: " + document.getElementById("cep").value);
-
-          //Esta função deve, caso o CEP exista, preencher os outros campos
-          pesquisarCep("cep", "rua", "bairro", "cidade", "uf", "msg_erro");
-        }
-      </script>
     </body>
 </html>
